@@ -23,3 +23,5 @@ def main():
             cat(note)
     else:
         print("Command not recognised")
+
+# TODO append, prepend lines from single command
