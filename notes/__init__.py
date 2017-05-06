@@ -43,3 +43,5 @@ def find(pattern):
         if pattern in text:
             print(note)
 
+def cat(note):
+    print("\n{}\n{}\n{}".format(note, "-" * 80, open(path(note)).read()))

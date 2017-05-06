@@ -1,5 +1,5 @@
 from sys import argv
-from notes import default, edit, list, find
+from notes import default, edit, list, find, cat
 
 def main():
     if len(argv) <= 1:
@@ -18,5 +18,8 @@ def main():
             find(args[0])
         else:
             list()
+    elif command == "cat" or command == "c":
+        for note in args:
+            cat(note)
     else:
         print("Command not recognised")
