@@ -1,5 +1,6 @@
 from sys import argv
-from en import output, edit, cat, filterNotes, search, find, append, delete
+from en import (output, edit, cat, getNotesByName, getNotesByContent,
+        getNotesByNameOrContent, append, delete)
 
 def head(args):
     if args:
@@ -61,23 +62,23 @@ def main():
     elif command == "cat" or command == "c":
         cat(args)
     elif command == "list" or command == "l":
-        output(filterNotes(args))
+        output(getNotesByName(args))
     elif command == "list-open" or command == "lo":
-        edit(filterNotes(args))
+        edit(getNotesByName(args))
     elif command == "list-cat" or command == "lc":
-        cat(filterNotes(args))
+        cat(getNotesByName(args))
     elif command == "search" or command == "s":
-        output(search(args))
+        output(getNotesByContent(args))
     elif command == "search-open" or command == "so":
-        edit(search(args))
+        edit(getNotesByContent(args))
     elif command == "search-cat" or command == "sc":
-        cat(search(args))
+        cat(getNotesByContent(args))
     elif command == "find" or command == "f":
-        output(find(args))
+        output(getNotesByNameOrContent(args))
     elif command == "find-open" or command == "fo":
-        edit(find(args))
+        edit(getNotesByNameOrContent(args))
     elif command == "find-cat" or command == "fc":
-        cat(find(args))
+        cat(getNotesByNameOrContent(args))
     elif command == "append" or command == "a":
         append(head(args), head(args[1:]))
     elif command == "append-cat" or command == "ac":
@@ -85,7 +86,7 @@ def main():
     # No short option to guard against accidental deletion
     elif command == "delete":
         delete(head(args))
-        output(filterNotes([]))
+        output(getNotesByName([]))
     elif command == "help" or command == "h":
         help(head(args))
     else:

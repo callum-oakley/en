@@ -7,6 +7,10 @@ editor = getenv("EDITOR", "vim")
 core = "core"
 extension = ".md"
 
+def output(notes):
+    for note in notes:
+        print(note)
+
 def path(note):
     return "{}/{}.md".format(root, note)
 
@@ -31,17 +35,6 @@ def cat(notes):
     for note in notes:
         display(note)
 
-def stripExtension(file):
-    return file.rpartition(".")[0]
-
-def getNotes():
-    return (stripExtension(file) for file in listdir(root) if
-            file.endswith(extension))
-
-def output(notes):
-    for note in notes:
-        print(note)
-
 def smartCaseIn(x, y):
     if x.islower():
         y = y.lower()
@@ -50,15 +43,22 @@ def smartCaseIn(x, y):
 def getText(note):
     return open(path(note)).read()
 
-def filterNotes(patterns):
+def stripExtension(file):
+    return file.rpartition(".")[0]
+
+def getNotes():
+    return (stripExtension(file) for file in listdir(root) if
+            file.endswith(extension))
+
+def getNotesByName(patterns):
     return (note for note in getNotes() if
             all(smartCaseIn(pattern, note) for pattern in patterns))
 
-def search(patterns):
+def getNotesByContent(patterns):
     return (note for note in getNotes() if
             all(smartCaseIn(pattern, getText(note)) for pattern in patterns))
 
-def find(patterns):
+def getNotesByNameOrContent(patterns):
     return (note for note in getNotes() if
             all(smartCaseIn(pattern, note) or
                 smartCaseIn(pattern, getText(note)) for pattern in patterns))
