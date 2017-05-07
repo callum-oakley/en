@@ -7,9 +7,6 @@ editor = getenv("EDITOR", "vim")
 core = "core"
 extension = ".md"
 
-def default():
-    output(list(None))
-
 def path(note):
     return "{}/{}.md".format(root, note)
 
