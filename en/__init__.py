@@ -45,27 +45,36 @@ def output(notes):
     for note in notes:
         print(note)
 
-def list(pattern):
-    if pattern == None:
-        pattern = ""
-    matches = []
-    for note in getNotes():
-        if pattern in note:
-            matches.append(note)
-    return matches
+def filterNotes(patterns):
+    notes = getNotes()
+    for pattern in patterns:
+        for note in list(notes):
+            if pattern not in note:
+                notes.remove(note)
+    return notes
 
-def find(pattern):
-    if pattern == None:
-        pattern = ""
-    matches = []
-    for note in getNotes():
-        text = open(path(note)).read()
-        # Case insensitive search unless there are capitals in pattern
-        if pattern.islower():
-            text = text.lower()
-        if pattern in text:
-            matches.append(note)
-    return matches
+def search(patterns):
+    notes = getNotes()
+    for pattern in patterns:
+        for note in list(notes):
+            text = open(path(note)).read()
+            # Case insensitive search unless there are capitals in pattern
+            if pattern.islower():
+                text = text.lower()
+            if pattern not in text:
+                notes.remove(note)
+    return notes
+
+def find(patterns):
+    notes = getNotes()
+    for pattern in patterns:
+        for note in list(notes):
+            text = open(path(note)).read()
+            if pattern.islower():
+                text = text.lower()
+            if pattern not in text and pattern not in note:
+                notes.remove(note)
+    return notes
 
 def append(note, line):
     if not note:
