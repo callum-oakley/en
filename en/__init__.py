@@ -35,46 +35,33 @@ def stripExtension(file):
     return file.rpartition(".")[0]
 
 def getNotes():
-    notes = []
-    for file in listdir(root):
-        if file.endswith(extension):
-            notes.append(stripExtension(file))
-    return notes
+    return (stripExtension(file) for file in listdir(root) if
+            file.endswith(extension))
 
 def output(notes):
     for note in notes:
         print(note)
 
+def smartCaseIn(x, y):
+    if x.islower():
+        y = y.lower()
+    return x in y
+
+def getText(note):
+    return open(path(note)).read()
+
 def filterNotes(patterns):
-    notes = getNotes()
-    for pattern in patterns:
-        for note in list(notes):
-            if pattern not in note:
-                notes.remove(note)
-    return notes
+    return (note for note in getNotes() if
+            all(smartCaseIn(pattern, note) for pattern in patterns))
 
 def search(patterns):
-    notes = getNotes()
-    for pattern in patterns:
-        for note in list(notes):
-            text = open(path(note)).read()
-            # Case insensitive search unless there are capitals in pattern
-            if pattern.islower():
-                text = text.lower()
-            if pattern not in text:
-                notes.remove(note)
-    return notes
+    return (note for note in getNotes() if
+            all(smartCaseIn(pattern, getText(note)) for pattern in patterns))
 
 def find(patterns):
-    notes = getNotes()
-    for pattern in patterns:
-        for note in list(notes):
-            text = open(path(note)).read()
-            if pattern.islower():
-                text = text.lower()
-            if pattern not in text and pattern not in note:
-                notes.remove(note)
-    return notes
+    return (note for note in getNotes() if
+            all(smartCaseIn(pattern, note) or
+                smartCaseIn(pattern, getText(note)) for pattern in patterns))
 
 def append(note, line):
     if not note:
