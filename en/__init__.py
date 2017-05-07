@@ -1,4 +1,4 @@
-from os import getenv, listdir
+from os import getenv, listdir, remove
 from subprocess import call, check_output
 
 # Would be nice to get these from a config file
@@ -8,7 +8,7 @@ core = "core"
 extension = ".md"
 
 def default():
-    edit([core])
+    output(list(None))
 
 def path(note):
     return "{}/{}.md".format(root, note)
@@ -69,3 +69,21 @@ def find(pattern):
         if pattern in text:
             matches.append(note)
     return matches
+
+def append(note, line):
+    if not note:
+        print("Nothing to add...")
+        return []
+    if not line:
+        note, line = core, note
+    open(path(note), "a").write(line + "\n")
+    return [note]
+
+def delete(note):
+    if not note:
+        print("Nothing to delete...\n")
+        return
+    try:
+        remove(path(note))
+    except FileNotFoundError:
+        print("File not found...\n")
