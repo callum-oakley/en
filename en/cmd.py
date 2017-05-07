@@ -1,5 +1,5 @@
 from sys import argv
-from notes import default, edit, list, find, cat
+from en import default, edit, list, find, cat
 
 def main():
     if len(argv) <= 1:

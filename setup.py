@@ -1,16 +1,16 @@
 from setuptools import setup
 
 setup(
-    name="notes",
-    version="0.1",
+    name="en",
+    version="0.2",
     description="Utility for organising notes.",
-    url="http://github.com/hot-leaf-juice/notes",
+    url="http://github.com/hot-leaf-juice/en",
     author="Callum Oakley",
     author_email="c.oakley108@gmail.com",
     license="MIT",
-    packages=["notes"],
+    packages=["en"],
     entry_points={
-        "console_scripts": ["notes=notes.cmd:main"]
+        "console_scripts": ["en=en.cmd:main"]
     },
-    zip_safe=False
+    zip_safe=True
 )
