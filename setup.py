@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="en",
-    version="0.2",
+    version="0.3",
     description="Utility for organising notes.",
     url="http://github.com/hot-leaf-juice/en",
     author="Callum Oakley",
