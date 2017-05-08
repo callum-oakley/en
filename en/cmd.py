@@ -1,6 +1,6 @@
 from sys import argv
 from en import (output, edit, cat, getNotesByName, getNotesByContent,
-        getNotesByNameOrContent, append, delete)
+        getNotesByNameOrContent, append, rename, delete)
 
 def head(args):
     if args:
@@ -27,6 +27,7 @@ find-open   fo As above, but open the matching notes for editing
 find-cat    fc As above, but print the content of the matching notes to stdout
 append      a  Append a line to the specified note
 append-cat  ac As above, then prints the content of the updated note to stdout
+rename      r  Rename a note
 delete         Delete the specified note (no short option, to minimise mistakes)
 help        h  Print this help text to stdout, or examples for specific commands""")
     elif command == "open" or command == "o":
@@ -83,6 +84,8 @@ def main():
         append(head(args), head(args[1:]))
     elif command == "append-cat" or command == "ac":
         cat(append(head(args), head(args[1:])))
+    elif command == "rename" or command == "r":
+        output(rename(head(args), head(args[1:])))
     # No short option to guard against accidental deletion
     elif command == "delete":
         delete(head(args))

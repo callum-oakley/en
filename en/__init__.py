@@ -1,9 +1,8 @@
-from os import getenv, listdir, remove
-from subprocess import call, check_output
+import os, subprocess
 
 # Would be nice to get these from a config file
-root = "{}/notes".format(getenv("HOME"))
-editor = getenv("EDITOR", "vim")
+root = "{}/notes".format(os.getenv("HOME"))
+editor = os.getenv("EDITOR", "vim")
 core = "core"
 extension = ".md"
 # Set this to something not weird by default...
@@ -22,23 +21,22 @@ def edit(notes):
     command = [editor]
     for note in notes:
         command.append(path(note))
-    call(command)
+    subprocess.call(command)
 
 def getText(note):
     return open(path(note)).read()
 
 def separator():
-    return "-" * int(check_output(["stty", "size"]).split()[1])
+    return "-" * int(subprocess.check_output(["stty", "size"]).split()[1])
 
 def display(note):
-    # The italics here are super non-portable...
     text = ""
     print()
     try:
         text = getText(note)
     except FileNotFoundError:
         print("Couldn't find note: ", end="", flush=True)
-    call(catTitleTemplate.format(note), shell=True)
+    subprocess.call(catTitleTemplate.format(note), shell=True)
     print("{}\n{}".format(separator(), text))
 
 def cat(notes):
@@ -56,7 +54,7 @@ def stripExtension(file):
     return file.rpartition(".")[0]
 
 def getNotes():
-    return (stripExtension(file) for file in listdir(root) if
+    return (stripExtension(file) for file in os.listdir(root) if
             file.endswith(extension))
 
 def getNotesByName(patterns):
@@ -81,11 +79,21 @@ def append(note, line):
     open(path(note), "a").write(line + "\n")
     return [note]
 
+def rename(old, new):
+    if not old or not new:
+        print("Nothing to rename...\n")
+    else:
+        try:
+            os.rename(path(old), path(new))
+        except FileNotFoundError:
+            print("File not found...\n")
+    return getNotes()
+
 def delete(note):
     if not note:
         print("Nothing to delete...\n")
         return
     try:
-        remove(path(note))
+        os.remove(path(note))
     except FileNotFoundError:
         print("File not found...\n")
