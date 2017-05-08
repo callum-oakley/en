@@ -15,19 +15,28 @@ def path(note):
     return "{}/{}.md".format(root, note)
 
 def edit(notes):
+    if not notes:
+        notes = [core]
     command = [editor]
     for note in notes:
         command.append(path(note))
     call(command)
 
+def getText(note):
+    return open(path(note)).read()
+
 def separator():
     return "-" * int(check_output(["stty", "size"]).split()[1])
 
 def display(note):
+    # The italics here are super non-portable...
     try:
-        print("\n{}\n{}\n{}".format(note, separator(), open(path(note)).read()))
+        text = getText(note)
+        call("/bin/zsh -c 'echo \"\n\e[3m{}\e[23m\"'".format(note), shell=True)
+        print("{}\n{}".format(separator(), text))
     except FileNotFoundError:
-        print("\nCouldn't find note: {}\n{}\n".format(note, separator()))
+        call("/bin/zsh -c $'echo \"\nCouldn\\'t find note: \e[3m{}\e[23m\"'".format(note), shell=True)
+        print("{}\n".format(separator()))
 
 def cat(notes):
     if not notes:
@@ -39,9 +48,6 @@ def smartCaseIn(x, y):
     if x.islower():
         y = y.lower()
     return x in y
-
-def getText(note):
-    return open(path(note)).read()
 
 def stripExtension(file):
     return file.rpartition(".")[0]
