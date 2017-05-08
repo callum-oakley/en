@@ -6,6 +6,8 @@ root = "{}/notes".format(getenv("HOME"))
 editor = getenv("EDITOR", "vim")
 core = "core"
 extension = ".md"
+# Set this to something not weird by default...
+catTitleTemplate = "/bin/zsh -c 'echo \"\e[3m{}\e[23m\"'"
 
 def output(notes):
     for note in notes:
@@ -30,13 +32,14 @@ def separator():
 
 def display(note):
     # The italics here are super non-portable...
+    text = ""
+    print()
     try:
         text = getText(note)
-        call("/bin/zsh -c 'echo \"\n\e[3m{}\e[23m\"'".format(note), shell=True)
-        print("{}\n{}".format(separator(), text))
     except FileNotFoundError:
-        call("/bin/zsh -c $'echo \"\nCouldn\\'t find note: \e[3m{}\e[23m\"'".format(note), shell=True)
-        print("{}\n".format(separator()))
+        print("Couldn't find note: ", end="", flush=True)
+    call(catTitleTemplate.format(note), shell=True)
+    print("{}\n{}".format(separator(), text))
 
 def cat(notes):
     if not notes:
