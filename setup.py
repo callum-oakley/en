@@ -1,8 +1,8 @@
-from setuptools import setup
+import setuptools
 
-setup(
+setuptools.setup(
     name="en",
-    version="0.3",
+    version=open("en/version").read().strip(),
     description="Utility for organising notes.",
     url="http://github.com/hot-leaf-juice/en",
     author="Callum Oakley",

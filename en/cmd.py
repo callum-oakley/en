@@ -1,4 +1,5 @@
-from sys import argv
+import sys
+import pkg_resources
 from en import (output, edit, cat, getNotesByName, getNotesByContent,
         getNotesByNameOrContent, append, rename, delete)
 
@@ -29,7 +30,8 @@ append      a  Append a line to the specified note
 append-cat  ac As above, then prints the content of the updated note to stdout
 rename      r  Rename a note
 delete         Delete the specified note (no short option, to minimise mistakes)
-help        h  Print this help text to stdout, or examples for specific commands""")
+help        h  Print this help text to stdout, or examples for specific commands
+version     v  Print version information""")
     elif command == "open" or command == "o":
         print("""
 en open <note>
@@ -54,10 +56,10 @@ en cat
         print("Help text not found...")
 
 def main():
-    if len(argv) <= 1:
+    if len(sys.argv) <= 1:
         help(None)
         return
-    command, args = argv[1], argv[2:]
+    command, args = sys.argv[1], sys.argv[2:]
     if command == "open" or command == "o":
         edit(args)
     elif command == "cat" or command == "c":
@@ -92,6 +94,8 @@ def main():
         output(getNotesByName([]))
     elif command == "help" or command == "h":
         help(head(args))
+    elif command == "version" or command == "v":
+        print(pkg_resources.require("en")[0].version)
     else:
         print("Command not recognised...\n")
         help(None)
