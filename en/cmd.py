@@ -9,6 +9,7 @@ def head(args):
     return None
 
 def help(command):
+
     if command == None:
         print("""
 usage: en <command> [args]
@@ -32,7 +33,8 @@ rename      r  Rename a note
 delete         Delete the specified note (no short option, to minimise mistakes)
 help        h  Print this help text to stdout, or examples for specific commands
 version     v  Print version information""")
-    elif command == "open" or command == "o":
+
+    elif command in ["open", "o"]:
         print("""
 en open <note>
     opens <note> with $EDITOR
@@ -42,7 +44,8 @@ en open <note1> <note2> ... <noteN>
 
 en open
     opens core with $EDITOR""")
-    elif command == "cat" or command == "c":
+
+    elif command in ["cat", "c"]:
         print("""
 en cat <note>
     prints the content of <note> to stdout
@@ -52,6 +55,27 @@ en cat <note1> <note2> ... <noteN>
 
 en cat
     prints the content of core to stdout""")
+
+    elif command in ["list", "l"]:
+        print("""
+en list <pattern>
+    lists those notes with names containing <pattern>
+
+en list <pattern1> <pattern2> ... <patternN>
+    lists those notes with names containing all of <pattern1>, <pattern2>
+    ... <patternN>
+
+en list
+    lists the names of every note""")
+
+    elif command in ["list-open", "lo"]:
+        print("""
+list notes as with the list command, then immediately open them""")
+
+    elif command in ["list-cat", "lc"]:
+        print("""
+list notes as with the list command, then immediately cat them""")
+
     else:
         print("Help text not found...")
 
@@ -60,41 +84,41 @@ def main():
         help(None)
         return
     command, args = sys.argv[1], sys.argv[2:]
-    if command == "open" or command == "o":
+    if command in ["open", "o"]:
         edit(args)
-    elif command == "cat" or command == "c":
+    elif command in ["cat", "c"]:
         cat(args)
-    elif command == "list" or command == "l":
+    elif command in ["list", "l"]:
         output(getNotesByName(args))
-    elif command == "list-open" or command == "lo":
+    elif command in ["list-open", "lo"]:
         edit(getNotesByName(args))
-    elif command == "list-cat" or command == "lc":
+    elif command in ["list-cat", "lc"]:
         cat(getNotesByName(args))
-    elif command == "search" or command == "s":
+    elif command in ["search", "s"]:
         output(getNotesByContent(args))
-    elif command == "search-open" or command == "so":
+    elif command in ["search-open", "so"]:
         edit(getNotesByContent(args))
-    elif command == "search-cat" or command == "sc":
+    elif command in ["search-cat", "sc"]:
         cat(getNotesByContent(args))
-    elif command == "find" or command == "f":
+    elif command in ["find", "f"]:
         output(getNotesByNameOrContent(args))
-    elif command == "find-open" or command == "fo":
+    elif command in ["find-open", "fo"]:
         edit(getNotesByNameOrContent(args))
-    elif command == "find-cat" or command == "fc":
+    elif command in ["find-cat", "fc"]:
         cat(getNotesByNameOrContent(args))
-    elif command == "append" or command == "a":
+    elif command in ["append", "a"]:
         append(head(args), head(args[1:]))
-    elif command == "append-cat" or command == "ac":
+    elif command in ["append-cat", "ac"]:
         cat(append(head(args), head(args[1:])))
-    elif command == "rename" or command == "r":
+    elif command in ["rename", "r"]:
         output(rename(head(args), head(args[1:])))
     # No short option to guard against accidental deletion
     elif command == "delete":
         delete(head(args))
         output(getNotesByName([]))
-    elif command == "help" or command == "h":
+    elif command in ["help", "h"]:
         help(head(args))
-    elif command == "version" or command == "v":
+    elif command in ["version", "v"]:
         print(pkg_resources.require("en")[0].version)
     else:
         print("Command not recognised...\n")
